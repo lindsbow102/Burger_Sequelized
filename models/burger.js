@@ -1,13 +1,26 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Burger = sequelize.define('Burger', {
-    burger_name: DataTypes.STRING,
+    burger_name: {
+    type: DataTypes.STRING,
+    allowNull: false
+    },
     devoured: { 
-      DataTypes: BOOLEAN,
+      type: DataTypes.BOOLEAN,
       defaultValue: false
-  }, {});
-  Burger.associate = function(models) {
-    // associations can be defined here
-  };
+    }
+  }, {
+    classMethods: {
+      associate: function(models){
+        //burger is associated with one customer
+        Burger.belongsTo(models.Customer, {
+          onDelete: "CASCADE",
+          foreignKey: {
+            allowNull: true
+          }
+        })
+      }
+    }
+  });
   return Burger;
 };
